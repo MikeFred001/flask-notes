@@ -35,7 +35,8 @@ def start():
 # TODO: Include redirect for already logged-in users.
 @app.route('/register', methods=["GET", "POST"])
 def show_register_form():
-    """Displays form to register a user"""
+    """GET/Form Fail: Displays form for a user to register
+    POST: Attempts to register user. On success, directs to user page."""
 
     form = NewUserForm()
 
@@ -79,8 +80,8 @@ def show_register_form():
 
 @app.route('/login', methods=["GET","POST"])
 def handle_login():
-    """Handles logins if user form is validated
-    Shows the login form on GET or invalid form"""
+    """GET/Form fail: Shows login form
+    POST: Attempts to log user in. On success, redirects to user page"""
 
     form = LoginForm()
 
@@ -101,15 +102,16 @@ def handle_login():
 
 @app.get('/users/<username>')
 def display_user_info(username):
-    """Displays info about current user"""
+    """Displays info about current user if user is authorized"""
 
     user = User.query.get_or_404(username)
+    form = CSRFProtectForm()
 
-    if user.username == session['username']:
-        return render_template('user.html', user=user)
+    if user.username == session.get('username'):
+        return render_template('user.html', user=user, form=form)
     else:
         flash("You must be logged in to view that page")
-        return redirect('/login', user=user)
+        return redirect('/login')
 
 
 @app.post('/logout')
