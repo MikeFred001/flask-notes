@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from app import bcrypt
 
 db = SQLAlchemy()
 def connect_db(app):
@@ -39,3 +40,17 @@ class User(db.Model):
         db.String(30),
         nullable=False
     )
+
+    @classmethod
+    def authenticate(cls, username, password):
+        user = cls.query.filter_by(username=username).one_or_none()
+
+        if (user and bcrypt.check_password_hash(user.password,password)):
+            return user
+        else:
+            return False
+
+
+
+
+
