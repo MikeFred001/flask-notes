@@ -4,15 +4,14 @@ import os
 
 from flask import Flask, render_template, redirect, session, flash
 from flask_bcrypt import Bcrypt
-bcrypt = Bcrypt()
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-app = Flask(__name__)
 from models import db, connect_db, User
 from forms import NewUserForm, LoginForm, CSRFProtectForm
 
-
+bcrypt = Bcrypt()
+app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "secret"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
