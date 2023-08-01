@@ -3,5 +3,8 @@
 {% block title %}New User{% endblock %}
 <!-- for testing: ***login.html*** -->
 {% block content %}
+<form action="/login" method="POST">
   {% include 'base_form.html' %}
+  <button class="class btn btn-primary" type="submit">Login</button>
+</form>
 {% endblock %}

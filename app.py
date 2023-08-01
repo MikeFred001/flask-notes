@@ -5,13 +5,14 @@ import os
 from flask import Flask, render_template, redirect, session, flash
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
+
 from flask_debugtoolbar import DebugToolbarExtension
 
-from models import connect_db, User, db
-from forms import NewUserForm, LoginForm
-
-
 app = Flask(__name__)
+from models import db, connect_db, User
+from forms import NewUserForm, LoginForm, CSRFProtectForm
+
+
 
 app.config['SECRET_KEY'] = "secret"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -71,7 +72,7 @@ def show_register_form():
             db.session.commit()
 
             #login as new user
-            session['user_id'] = user.username
+            session['username'] = user.username
             return redirect(f'users/{user.username}')
 
     return render_template('new_user.html', form=form)
@@ -91,9 +92,34 @@ def handle_login():
         user = User.authenticate(username=username, password=password)
 
         if user:
-            session['user_id'] = user.username
+            session['username'] = user.username
             return redirect(f'/users/{user.username}')
         else:
             form.username.errors = ["Bad username/password"]
 
     return render_template('login.html', form=form)
+
+
+@app.get('/users/<username>')
+def display_user_info(username):
+    """Displays info about current user"""
+
+    user = User.query.get_or_404(username)
+
+    if user.username == session['username']:
+        return render_template('user.html', user=user)
+    else:
+        flash("You must be logged in to view that page")
+        return redirect('/login', user=user)
+
+
+@app.post('/logout')
+def logout():
+    """Logs current user out and redirects to home page"""
+
+    form = CSRFProtectForm()
+
+    if form.validate_on_submit():
+        session.pop("username", None)
+
+    return redirect('/')

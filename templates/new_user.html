@@ -3,5 +3,9 @@
 {% block title %}New User{% endblock %}
 <!-- for testing: ***new_user.html*** -->
 {% block content %}
-  {% include 'base_form.html' %}
+  <form action="/register" method="POST">
+    {% include 'base_form.html' %}
+    <button class="class btn btn-primary" type="submit">Register</button>
+  </form>
 {% endblock %}
+

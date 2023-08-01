@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from app import bcrypt
 
 db = SQLAlchemy()
+
 def connect_db(app):
     """Connect this database to provided Flask app."""
 

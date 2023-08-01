@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}User Page{% endblock %}
+<!-- for testing: ***user.html*** -->
+{% block content %}
+  <div>
+    <h1>{{ user.username }}</h1>
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+
+    <p>{{ user.email }}</p>
+  </div>
+
+  <form action="/logout" method="POST">
+    {% include 'base_form.html' %}
+    <button class="class btn btn-primary" type="submit">Logout</button>
+  </form>
+{% endblock %}
