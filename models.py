@@ -56,6 +56,18 @@ class User(db.Model):
             return False
 
 
+    # class Note(db.Model):
+    #     """Class for notes"""
 
+    #     __tablename__ = "notes"
+
+
+
+# Create a Note model:
+
+# id - a unique primary key that is an auto incrementing integer
+# title - a not-nullable column that is at most 100 characters
+# content - a not-nullable column that is text
+# owner_username - a foreign key that references the username column in the users table
 
 

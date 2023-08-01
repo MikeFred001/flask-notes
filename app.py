@@ -1,5 +1,5 @@
 """Flask app for notes"""
-
+# TODO: Secret key in .env
 import os
 
 from flask import Flask, render_template, redirect, session, flash
@@ -35,6 +35,7 @@ def start():
 # TODO: Include redirect for already logged-in users.
 @app.route('/register', methods=["GET", "POST"])
 def show_register_form():
+    #TODO: more descriptive function name
     """GET/Form Fail: Displays form for a user to register
     POST: Attempts to register user. On success, directs to user page."""
 
@@ -58,6 +59,9 @@ def show_register_form():
                 ["An account with that email address already exists"]
             )
             #TODO: is there an easy way to show both errors?
+            #TODO: Abstract user registration to class method
+            #TODO: Use try/except for database error catching,
+            # implement in class method
         else:
             #register the user
             user = User(
@@ -70,6 +74,7 @@ def show_register_form():
 
             db.session.add(user)
             db.session.commit()
+            # TODO: global variable to hold session user pk
 
             #login as new user
             session['username'] = user.username
@@ -103,6 +108,8 @@ def handle_login():
 @app.get('/users/<username>')
 def display_user_info(username):
     """Displays info about current user if user is authorized"""
+    #TODO: Verify authorization before retrieving user from db
+    #TODO: Fail fast
 
     user = User.query.get_or_404(username)
     form = CSRFProtectForm()
@@ -117,6 +124,7 @@ def display_user_info(username):
 @app.post('/logout')
 def logout():
     """Logs current user out and redirects to home page"""
+    #TODO:
 
     form = CSRFProtectForm()
 

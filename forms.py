@@ -25,7 +25,6 @@ class NewUserForm(FlaskForm):
     email = StringField(
         "Email",
         validators=[
-            Optional(),
             Email(message = "Must be a valid Email"),
             Length(max=50)
         ])
