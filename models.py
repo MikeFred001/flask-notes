@@ -44,6 +44,28 @@ class User(db.Model):
     )
 
     @classmethod
+    def register(cls, username, password, email, first_name, last_name):
+        hashed = bcrypt.generate_password_hash(password).decode('utf8')
+
+        if cls.query.get(username):
+            raise ValueError("Username Already Exists")
+        if cls.query.filter(cls.email==email).one_or_none():
+            raise ValueError("Email Address Already Registered")
+
+        user = cls(
+            username=username,
+            password=hashed,
+            email=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+
+        db.session.add(user)
+        db.session.commit()
+
+        return user
+
+    @classmethod
     def authenticate(cls, username, password):
         """Validate that user exists and password is correct.
         Return user if valid, else returns False"""
